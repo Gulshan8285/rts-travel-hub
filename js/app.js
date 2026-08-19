@@ -1,10 +1,10 @@
 /* ==========================================================================
    RTS TRAVEL HUB - CORE APPLICATION CONTROLLER
-   Integrated with Location Auto-Suggest, 24-Hr Time, Fullscreen Gallery Lightbox
+   Clean White Theme & Smooth Left-to-Right Swipeable Carousels
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initialize Booking Engine & Autocompletes
+  // 1. Initialize Booking Engine
   try {
     window.bookingEngine = new window.BookingEngine();
   } catch (err) {
@@ -18,23 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn('Gallery Lightbox initialization error:', err);
   }
 
-  // 3. Initialize Route Visualizer
-  try {
-    window.routeVisualizer = new window.RouteVisualizer('route-canvas');
-  } catch (err) {
-    console.warn('Route visualizer initialization error:', err);
-  }
-
-  // 4. Initialize Horizontal Luxury Search Ribbon Events
+  // 3. Initialize Horizontal Search Bar & Modals
   initHorizontalSearchRibbon();
 
-  // 5. Fleet Card "Book This Car" buttons
+  // 4. Initialize Smooth Carousel Navigation Arrows
+  initCarouselArrows();
+
+  // 5. Fleet Card "Book Now" buttons
   const fleetBookBtns = document.querySelectorAll('.fleet-book-btn');
   fleetBookBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       const carType = e.currentTarget.getAttribute('data-car');
       if (carType) {
-        // Sync horizontal bar
+        // Sync select dropdown
         const hCarSelect = document.getElementById('h-car-type');
         if (hCarSelect) hCarSelect.value = carType;
 
@@ -52,7 +48,6 @@ function initHorizontalSearchRibbon() {
   const hCarType = document.getElementById('h-car-type');
   const hFindCarBtn = document.getElementById('h-find-car-btn');
 
-  // Sync Car Type
   if (hCarType) {
     hCarType.addEventListener('change', (e) => {
       const val = e.target.value;
@@ -63,13 +58,42 @@ function initHorizontalSearchRibbon() {
     });
   }
 
-  // Find Car Action
   if (hFindCarBtn) {
     hFindCarBtn.addEventListener('click', () => {
       if (window.bookingEngine) {
         window.bookingEngine.updateRouteSummary();
         window.bookingEngine.openPassengerModal();
       }
+    });
+  }
+}
+
+function initCarouselArrows() {
+  // Fleet Track Arrow Controls
+  const fleetTrack = document.getElementById('fleet-track');
+  const fleetPrev = document.getElementById('fleet-prev-btn');
+  const fleetNext = document.getElementById('fleet-next-btn');
+
+  if (fleetTrack && fleetPrev && fleetNext) {
+    fleetPrev.addEventListener('click', () => {
+      fleetTrack.scrollBy({ left: -320, behavior: 'smooth' });
+    });
+    fleetNext.addEventListener('click', () => {
+      fleetTrack.scrollBy({ left: 320, behavior: 'smooth' });
+    });
+  }
+
+  // Gallery Track Arrow Controls
+  const galleryTrack = document.getElementById('gallery-track');
+  const galleryPrev = document.getElementById('gallery-prev-btn');
+  const galleryNext = document.getElementById('gallery-next-btn');
+
+  if (galleryTrack && galleryPrev && galleryNext) {
+    galleryPrev.addEventListener('click', () => {
+      galleryTrack.scrollBy({ left: -280, behavior: 'smooth' });
+    });
+    galleryNext.addEventListener('click', () => {
+      galleryTrack.scrollBy({ left: 280, behavior: 'smooth' });
     });
   }
 }
