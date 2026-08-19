@@ -1,6 +1,6 @@
 /* ==========================================================================
    RTS TRAVEL HUB - WHATSAPP DISPATCHER (TARGET: +91 7412894128)
-   Reliable • Safe • Luxury | Established 2002
+   Reliable • Safe • Luxury | Govt. MSME: UDYAM-HR-05-0189707
    ========================================================================== */
 
 const DISPATCH_PHONE = '917412894128';
@@ -20,7 +20,7 @@ class WhatsAppDispatcher {
     const { customer, trip } = data;
 
     const message = `*🚖 RTS TRAVEL HUB - CORPORATE CAB BOOKING REQUEST*
-_Reliable • Safe • Luxury (Since 2002)_
+_Reliable • Safe • Luxury (Govt MSME: UDYAM-HR-05-0189707)_
 ----------------------------------------
 *Booking ID:* ${bookingId}
 *Date:* ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
@@ -46,9 +46,11 @@ _Reliable • Safe • Luxury (Since 2002)_
 ${customer.notes}
 ----------------------------------------
 🏢 *RTS TRAVEL HUB*
+📜 Govt. MSME Reg: UDYAM-HR-05-0189707
 📍 B-26, Vyapar Kendra, Sushant Lok, DLF Phase 1, Gurugram - 122002
 📞 Helplines: +91 7412894128 | +91 9811708801 | +91 7409534724
-✉️ Email: rtsyadavsanjeet@gmail.com
+✉️ Email: rtstravelhub@gmail.com
+🌐 Facebook: https://www.facebook.com/share/1DXZkn7j9b/
 📸 Instagram: @rtstravelhub`;
 
     const encoded = encodeURIComponent(message);

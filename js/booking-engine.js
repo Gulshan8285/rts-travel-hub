@@ -1,6 +1,6 @@
 /* ==========================================================================
-   RTS TRAVEL HUB - BOOKING ENGINE (MANUAL CITY INPUT & DATE RESTRICTIONS)
-   Reliable • Safe • Luxury (Since 2002)
+   RTS TRAVEL HUB - BOOKING ENGINE (SIMPLIFIED TRIP MODES & VALIDATION)
+   Reliable • Safe • Luxury (Govt MSME: UDYAM-HR-05-0189707)
    ========================================================================== */
 
 const ROUTE_DATABASE = {
@@ -34,7 +34,7 @@ const CAR_NAMES = {
 
 class BookingEngine {
   constructor() {
-    this.tripType = 'outstation-oneway';
+    this.tripType = 'outstation';
     this.pickupCity = 'Gurgaon';
     this.dropCity = 'Hyderabad';
     this.selectedCar = 'innova';
@@ -71,7 +71,7 @@ class BookingEngine {
     // 2. Set min attribute so PAST DATES CANNOT BE SELECTED
     hDateInput.setAttribute('min', todayStr);
 
-    // 3. Default to today or tomorrow
+    // 3. Default to today
     this.pickupDate = todayStr;
     hDateInput.value = todayStr;
 
@@ -91,7 +91,7 @@ class BookingEngine {
         tabs.forEach((t) => t.classList.remove('active'));
         e.currentTarget.classList.add('active');
         const mode = e.currentTarget.getAttribute('data-service');
-        this.tripType = mode === 'airport' ? 'airport' : mode === 'local' ? 'local' : mode === 'outstation' ? 'outstation-round' : 'outstation-oneway';
+        this.tripType = mode === 'airport' ? 'airport' : mode === 'local' ? 'local' : 'outstation';
         
         const hBookingMode = document.getElementById('h-booking-mode');
         if (hBookingMode) hBookingMode.value = this.tripType;
@@ -204,17 +204,9 @@ class BookingEngine {
       distance = info.distance;
       duration = info.duration;
       expressway = info.expressway;
-
-      if (this.tripType === 'outstation-round') {
-        duration = `Round-Trip (${Math.max(2, Math.ceil(distance / 350))} Days)`;
-      }
     }
 
     this.routeData = { distance, duration, expressway };
-
-    if (window.routeVisualizer) {
-      window.routeVisualizer.updateRoute(cleanPickup, cleanDrop, distance, duration);
-    }
   }
 
   openPassengerModal() {
@@ -299,13 +291,16 @@ class BookingEngine {
     }
 
     if (!address) {
-      alert('Please enter exact Pickup Address / Landmark.');
+      alert('Please enter exact Pickup Address / Location.');
       document.getElementById('cust-address').focus();
       return;
     }
 
     const modal = document.getElementById('booking-modal');
     if (modal) modal.classList.remove('active');
+
+    // Trip type label for dispatch
+    const tripTypeLabel = this.tripType === 'local' ? 'FULL-DAY LOCAL DISPOSAL' : this.tripType === 'airport' ? 'AIRPORT TRANSFER' : 'OUTSTATION';
 
     // ROUTE DIRECTLY TO WHATSAPP (+91 7412894128)
     if (window.whatsappDispatcher) {
@@ -320,7 +315,7 @@ class BookingEngine {
           time: this.pickupTime,
         },
         trip: {
-          type: this.tripType.toUpperCase(),
+          type: tripTypeLabel,
           from: this.pickupCity,
           to: this.tripType === 'local' ? 'Local Disposal (City)' : this.dropCity,
           car: CAR_NAMES[this.selectedCar] || 'Executive Cab',
